@@ -1,18 +1,23 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 
 @section('content')
-<div class="container">
+<div class="d-flex justify-content-center">
 
     <!-- Proveedores-->
-    <div class="col-lg-9 col-md-6 mb-4 faqs">
-        <h2 class="my-4">Editar Articulo</h2>
+    <div class="col-lg-9 col-md-6 mb-4">
+        <div class="row col-12">
+            <h2 class="my-4">Editar Articulo</h2>
+            <div class="col-7"></div>
+            <div class="align-content-end">
+                <a href="{{url('/articulos')}}" class="btn btn-outline-primary">Volver</a>
+            </div>
+        </div>
 
             <div class="card">
                 <div class="card-header">{{ __('Editar Articulo') }}</div>
-
                 <div class="card-body">
-                <form method="POST" action="/articulos/edit/{{$articulo->id}}" enctype="multipart/form-data"> 
+                    <form method="POST" action="/articulos/edit/{{$articulo->id}}" enctype="multipart/form-data"> 
                         {{-- <form method="POST"  enctype="multipart/form-data"> --}}
                         {{ csrf_field() }}
  
@@ -91,7 +96,7 @@
                                 <label for="observaciones" class="col-md-4 col-form-label text-md-right">{{ __('Observaciones') }}</label>
     
                                 <div class="col-md-6">
-                                <textarea   cols="30" rows="6" id="observaciones" type="text" class="form-control @error('observaciones') is-invalid @enderror" name="observaciones" value="{{$articulo->observaciones}}" required autocomplete="observaciones" autofocus></textarea>
+                                <textarea   cols="30" rows="6" id="observaciones" type="text" class="form-control @error('observaciones') is-invalid @enderror" name="observaciones"  autocomplete="observaciones" autofocus>{{$articulo->observaciones}}</textarea>
      
                                     @error('observaciones')
                                     <span class="invalid-feedback" role="alert">
@@ -158,7 +163,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <input type="hidden" name="id" value={{$articulo->id}}>
-                                <button type="submit" class="btn1 btn">
+                                <button type="submit" class="btn btn-primary">
                                     {{ __('Actualizar Articulo') }}
                                 </button>
                             </div>

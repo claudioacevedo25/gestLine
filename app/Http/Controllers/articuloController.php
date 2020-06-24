@@ -17,7 +17,7 @@ class articuloController extends Controller
     }
 
     public function listarArticulosVta(){
-        $articulos = Articulo::paginate(6);
+        $articulos = Articulo::inRandomOrder()->paginate(6);
         $categorias = Categoria::all();
         $vac = compact('articulos', 'categorias');
         return view('a_listaArticulosVta',$vac);
@@ -42,6 +42,25 @@ class articuloController extends Controller
         $articulo = Articulo::findOrFail($id);
         return view('a_articuloVta')->with('articulo',$articulo);
     }
+
+    
+    public function search(Request $req)
+    {
+        $query = $req['search'];
+        if($req['admin']){
+            $articulos = Articulo::where('observaciones','LIKE','%'.$query.'%')->paginate(6);
+            $vac = compact('articulos');
+            return view('a_listaArticulos',$vac);
+
+        }else{
+            $categorias = Categoria::all();
+            $articulos = Articulo::where('observaciones','LIKE','%'.$query.'%')->paginate(6);
+            $vac = compact('articulos', 'categorias');
+            return view('a_listaArticulosVta',$vac);
+        }
+        
+    }
+
 
     public function create( Request $req)
     {
@@ -77,7 +96,7 @@ class articuloController extends Controller
     
                 $nuevoArticulo->save();
             
-                return redirect('/articulos');
+                return redirect('/articulos/alta');
     }
 
         
@@ -94,6 +113,19 @@ class articuloController extends Controller
         $proveedores=Proveedores::all();
         $vac=compact('articulo','proveedores','categoria');
          return view('a_editArticulo',$vac);
+    }
+
+    public function updateAll(Request $req){
+        $porcentaje = $req['ganancia'];
+        $articulos = Articulo::all();
+        foreach($articulos as $articulo){
+            $precioCosto = $articulo->precio_costo;
+            $articulo->rentabilidad = $porcentaje;
+            $articulo->precio_venta = $precioCosto+($precioCosto*$porcentaje/100);
+            $articulo->save();
+        }
+        
+        return redirect('/articulos');
     }
 
     public function editPost(Request $req)

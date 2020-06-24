@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -81,6 +81,6 @@
              </table>
                     {{-- PAGINACION FUTURA --}}
 {{-- {{ $proveedores->links() }}       --}}
-<a href="/sucursales/alta" class="btn1 btn">Nueva Sucursal</a>
+
      
 @endsection

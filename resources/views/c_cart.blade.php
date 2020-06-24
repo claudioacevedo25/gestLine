@@ -123,8 +123,13 @@
                                             </div>
                                         </form>
                                     </td>
-                                    <td><a href=""><i class="fas fa-trash-alt fa-2x"></i></a></td>
-                                    <td>{{ number_format( $item->precio , 2)}}</td>
+                                    <td>
+                                        <form action="{{ url('/carrito/deleteItem', $item->id) }}" method="post">
+                                            @csrf
+                                            <button class="input-group-btn" type="submit"><i class="fas fa-trash-alt fa-2x"></i></button>                                              
+                                        </form>                          
+                                    </td>
+                                    <td>{{ number_format( $item->precio_venta , 2)}}</td>
                                     <td>{{$item->subtotal()}}</td>
                                 </tr>
                             @endforeach

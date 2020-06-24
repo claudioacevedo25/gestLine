@@ -1,21 +1,28 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 
         <!-- ACA VA TODO EL CODIGO -->
         
-        <h1 class="text-uppercase">Listado de Articulos</h1>
-       {{-- BUSCADOR A REPARAR --}}
-             {{-- <form action="{{route('search')}}" method="get">
-                <div class="form-group">
-                    <div class="input-group">
-                            <input type="text" class="form-control" name="search" id="" placeholder="Buscar..."> 
-                            <span class="input-group-btn">
-                                   <button type="submit" class="btn boton">Buscar</button>
-                            </span>
-                    </div>
-                </div>  
-             </form> --}}
+        <div class="container">
+            <div class="row col-12">
+              <h1 class="text-uppercase">Listado de Articulos</h1>
+              <div class="col-2"></div>
+              <div class="col align-self-end">
+                <form action="{{route('search')}}" method="get">
+                  <div class="form-group">
+                      <div class="input-group">
+                              <input type="text" class="form-control" name="search" id="" placeholder="Buscar...">
+                              <input type="hidden" name="admin" value="1"> 
+                              <span class="input-group-btn">
+                                <button type="submit" class="btn btn-outline-primary">Buscar</button>
+                             </span>
+                      </div>
+                  </div>  
+              </form>
+              </div>
+            </div>
+          </div>
             <table class="table table-striped">
                     <thead>
                         <tr>
@@ -28,7 +35,7 @@
                             <th scope="col">Categoria</th>
                             <th scope="col">Proveedor</th>
                             <th scope="col">Modificar</th>
-                            <th scope="col">Eliminar</th>
+                            <th scope="col">Baja</th>
                            
                         </tr>
                     </thead>
@@ -77,7 +84,7 @@
                                         <div class="">
                                             <input type="hidden" name="id" value={{$key->id}}>
                                             <button type="submit" class="btn btn-danger">
-                                                {{ __('Eliminar') }}
+                                                {{ __('Baja') }}
                                             </button>
                                         </div>
                                     </div>
@@ -95,7 +102,28 @@
                         {{$articulos->links()}}
                 </div>
              </div>
-             
-<a href="/articulos/alta" class="btn1 btn">Nuevo Articulo</a>
+
+            
+
+                <div class="row col-12">
+                    <div class="col-2">
+                        <a href="/articulos/alta" class="btn btn-primary">Nuevo Articulo</a>
+                    </div>
+                    <div class="col-4"></div>
+                    <div class="col align-self-end">
+                        <form action="{{route('updateAll')}}" method="get">
+                          <div class="form-group">
+                              <div class="input-group">
+                                      <input type="text" class="form-control" name="ganancia" id="" placeholder="% de ganancia...">
+                                      <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-outline-primary">Aplicar Masivamente</button>
+                                     </span>
+                              </div>
+                          </div>  
+                      </form>
+                      </div>
+                </div>
+            
+
      
 @endsection

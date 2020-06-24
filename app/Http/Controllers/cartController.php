@@ -41,6 +41,29 @@ class cartController extends Controller
     }
 
 
+    public function deleteItem($id)
+    {
+
+        $cart = session('cart')->fresh();
+    
+        foreach ($cart->items as $product) {
+            if($product->id == $id){
+               
+               $x = current($cart->items);
+               $xx = key($x);
+                
+                unset($cart->items[$xx]); 
+                
+                session()->put('cart', $cart);
+            
+            }
+        }
+        
+        return redirect('/carrito');
+    
+    }
+
+
 
 
     public function confirm(Request $req) 
@@ -49,23 +72,21 @@ class cartController extends Controller
         
         // echo phpinfo();
         $cart = session('cart')->fresh();
-       
+        
         \MercadoPago\SDK::setAccessToken(env('MP_TEST_ACCESS_TOKEN'));
-
+        
         $preference = new \MercadoPago\Preference();
         
         $productos = [];
-
         //ACA vA EL PROCEDIMIENTO ALMACENADO QUE CREA UNA FACTURA NUEVA 
         $id_usuario = auth()->user()->id;
-        
         \DB::select("CALL sp_insertarFactura($id_usuario)");
         
         foreach ($cart->items as $product) {
 
             $id_articulo = $product->id;
             $cantidad = $product->qty;
-            $precio_unitario = $product->precio;
+            $precio_unitario = $product->precio_venta;
             //ACA VA EL PROCEDIMIENTO ALMACENADO QUE CARGA EL DETALLE DE FACTURA
             \DB::select("CALL sp_agregarDetalleFactura($id_articulo,$cantidad)"); 
            
@@ -86,7 +107,7 @@ class cartController extends Controller
             'failure' => url('/mp/failure'),
             'pending' => url('/mp/pending'),
         ];
-        
+        $preference->auto_return = "approved";
         $preference->save();
 
 

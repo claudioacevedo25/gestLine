@@ -1,6 +1,15 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
+
+<div class="col-lg-9 col-md-6 mb-4">
+    <div class="row col-12">
+        <h2 class="my-4">Editar Proveedor</h2>
+        <div class="col-7"></div>
+        <div class="align-content-end">
+            <a href="{{url('/proveedores')}}" class="btn btn-outline-primary">Volver</a>
+        </div>
+    </div>
 
          <div class="card">
              <div class="card-header">{{ __('Editar Proveedor') }}</div>
@@ -91,7 +100,7 @@
                                     <div class="form-group row mb-0">
                                         <div class="col-md-6 offset-md-4">
                                             <input type="hidden" name="id" value={{$proveedores->id}}>
-                                            <button type="submit" class="btn1 btn">
+                                            <button type="submit" class="btn btn-primary">
                                                 {{ __('Actualizar Proveedor') }}
                                             </button>
                                         </div>

@@ -1,7 +1,14 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 
+<div class="row col-12">
+    <h2 class="my-4">Editar Usuario</h2>
+    <div class="col-7"></div>
+    <div class="align-content-end">
+        <a href="{{url('/cuentas')}}" class="btn btn-outline-primary">Volver</a>
+    </div>
+</div>
          <div class="card">
              <div class="card-header">{{ __('Editar Usuario') }}</div>
                 <div class="card-body">
@@ -132,7 +139,7 @@
                                     <div class="form-group row mb-0">
                                         <div class="col-md-6 offset-md-4">
                                             <input type="hidden" name="id" value={{$usuarios->id}}>
-                                            <button type="submit" class="btn1 btn">
+                                            <button type="submit" class="btn btn-primary">
                                                 {{ __('Actualizar Usuario') }}
                                             </button>
                                         </div>

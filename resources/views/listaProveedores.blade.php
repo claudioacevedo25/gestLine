@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -27,7 +27,7 @@
                             <th scope="col">Estado</th>
                             <th scope="col">Rubro</th>
                             <th scope="col">Modificar</th>
-                            <th scope="col">Eliminar</th>
+                            <th scope="col">Baja</th>
                            
                         </tr>
                     </thead>
@@ -71,7 +71,7 @@
                                         <div class="">
                                             <input type="hidden" name="id" value={{$key->id}}>
                                             <button type="submit" class="btn btn-danger">
-                                                {{ __('Eliminar') }}
+                                                {{ __('Baja') }}
                                             </button>
                                         </div>
                                     </div>
@@ -84,6 +84,6 @@
              </table>
                     {{-- PAGINACION FUTURA --}}
 {{-- {{ $proveedores->links() }}       --}}
-<a href="/proveedores/alta" class="btn1 btn">Nuevo Proveedor</a>
+<a href="/proveedores/alta" class="btn btn-primary">Nuevo Proveedor</a>
      
 @endsection

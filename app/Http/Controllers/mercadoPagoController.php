@@ -4,28 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-
 class mercadoPagoController extends Controller
 {
-    public function store(Request $request)
-    {
-        // Aqui tomamos los datos de la notificacion
-    }
 
     public function pending(Request $request) 
     {
+        $response = json_encode($request->all());
         $cart = session('cart')->fresh();
-        
         $cart->update([
-            'mp_response' => $request->all()
+            'mp_response' => $response
         ]);
 
-        dd($request);
+        return redirect('/product/list');
     }
 
     public function failure(Request $request) 
     {
-        dd($request);
+        return redirect('/carrito');
     }
     
     public function success(Request $request) 

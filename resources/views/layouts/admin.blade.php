@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script>  --}}
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -24,164 +24,155 @@
 	<script src="https://kit.fontawesome.com/9f3c14b92e.js" crossorigin="anonymous"></script> 
 </head>
 <body>
-    <div id="app">
+    <header class="default-header">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-             <div class="container">
-                    <div>
-                        <i class="far fa-handshake "></i>
-                        <a class="navbar-brand" href="{{ url('/home') }}">
-                            {{ config('app.name', 'Laravel') }}
-                        </a>
-                    </div>
-                
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+            <div class="container">
+                   <div>
+                       <i class="far fa-handshake "></i>
+                       <a class="navbar-brand" href="{{ url('/home') }}">
+                           {{ config('app.name', 'Laravel') }}
+                       </a>
+                   </div>
+               
+               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                   <span class="navbar-toggler-icon"></span>
+               </button>
+               {{-- ICONOS Y CARRITO DE COMPRA --}}
+               <div class="collapse navbar-collapse" id="navbarResponsive">
+                   <ul class="navbar-nav ml-auto">					 
+                     <li class="nav-item">
+                       <a class="nav-link" href="https://www.facebook.com/"><i class="fab fa-facebook fa-2x"></i></a>
+                     </li>
+                     <li class="nav-item">
+                       <a class="nav-link" href="https://www.twitter.com/"><i class="fab fa-twitter fa-2x"></i></a>
+                     </li>
+                     <li class="nav-item">
+                       <a class="nav-link" href="https://www.instagram.com/"><i class="fab fa-instagram fa-2x "></i></a>
+                     </li>
+           
+                     <!-- ESTOS li SON SOLO DE ESPACIOS ENNTRE LOS ICONOS -->
+                     <li class="nav-item  ">
+                       <a class="nav-link" href="./cart.php"><i class="fas fa-cart-plus fa-2x d-none"></i></a>
+                     </li>
+           
+                     <li class="nav-item  ">
+                       <a class="nav-link" href="./cart.php"><i class="fas fa-cart-plus fa-2x d-none"></i></a>
+                     </li>
+                     <li class="nav-item  ">
+                       <a class="nav-link" href="./cart.php"><i class="fas fa-cart-plus fa-2x d-none"></i></a>
+                     </li>
+                     {{-- CARRITO --}}
+                     @auth
+                        @if (Auth::user()->role != 'ADMIN_ROLE')
+                        <li class="nav-item">
+                            <a class="nav-link" href="/carrito"><i class="fas fa-cart-arrow-down fa-2x"></i><span class="badge"></span></a>	
+                        </li> 
+                        @endif
+                     @endauth
+                    
+                   </ul>
+                 </div> 
+           
+               
+
+               <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                   <!-- Left Side Of Navbar -->
+                   <ul class="navbar-nav mr-auto"></ul>
+
+                   <!-- Right Side Of Navbar -->
+                   <ul class="navbar-nav ml-auto">
+                       <!-- Authentication Links -->
+                       @guest
+                           <li class="nav-item">
+                               <a class="nav-link" href="{{ route('login') }}">{{ __('Ingresá') }}</a>
+                           </li>
+                           @if (Route::has('register'))
+                               <li class="nav-item">
+                                   <a class="nav-link" href="{{ route('register') }}">{{ __('Creá tu cuenta') }}</a>
+                               </li>
+                           @endif
+                       @else
+                           <li class="nav-item dropdown">
+                               <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                   <span class="caret text-uppercase">{{ Auth::user()->nombre }}</span> <span class="caret"></span>
+                               </a>
+
+                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                   <a class="dropdown-item" href="{{ route('logout') }}"
+                                      onclick="event.preventDefault();
+                                                    document.getElementById('logout-form').submit();">
+                                       {{ __('Salir') }}
+                                   </a>
+
+                                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                       @csrf
+                                   </form>
+                               </div>
+                           </li>
+                       @endguest
+                   </ul>
+               </div>
+           </div>
+       </nav>
+       
+        <div class="navbar navbar-expand-lg navbar-light  shadow-sm">
+            <div class="container">
+                  <a class="navbar-brand" href="index.html">
+                    <img src="img/logo.png" alt="">
+                  </a>
+                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
-                {{-- ICONOS Y CARRITO DE COMPRA --}}
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ml-auto">					 
-                      <li class="nav-item">
-                        <a class="nav-link" href="https://www.facebook.com/"><i class="fab fa-facebook fa-2x"></i></a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="https://www.twitter.com/"><i class="fab fa-twitter fa-2x"></i></a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="https://www.instagram.com/"><i class="fab fa-instagram fa-2x "></i></a>
-                      </li>
-            
-                      <!-- ESTOS li SON SOLO DE ESPACIOS ENNTRE LOS ICONOS -->
-                      <li class="nav-item  ">
-                        <a class="nav-link" href="./cart.php"><i class="fas fa-cart-plus fa-2x d-none"></i></a>
-                      </li>
-            
-                      <li class="nav-item  ">
-                        <a class="nav-link" href="./cart.php"><i class="fas fa-cart-plus fa-2x d-none"></i></a>
-                      </li>
-                      <li class="nav-item  ">
-                        <a class="nav-link" href="./cart.php"><i class="fas fa-cart-plus fa-2x d-none"></i></a>
-                      </li>
-                      {{-- CARRITO --}}
-                      @auth
-                      @if (Auth::user()->role != 'ADMIN_ROLE')
-                      <li class="nav-item">
-                          <a class="nav-link" href="/carrito"><i class="fas fa-cart-arrow-down fa-2x"></i><span class="badge"></span></a>	
-                      </li> 
-                      @endif
-                   @endauth
-                    </ul>
-                  </div>
-            
-                
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto"></ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Ingresá') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Creá tu cuenta') }}</a>
-                                </li>
-                            @endif
+                  </button>
+                  <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                         
+                        @auth
+                        @if (Auth::user()->role != 'ADMIN_ROLE')
+                        <li class="nav-item"> <a class="nav-link" href="/home">Home </a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/product/list">Productos</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/carrito">Carrito</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/faq">FAQ's</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/contact">Contacto</a> </li>
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <span class="caret text-uppercase">{{ Auth::user()->nombre }}</span> <span class="caret"></span>
-                                </a>
+                        <li class="nav-item"> <a class="nav-link" href="/cuentas">Cuentas</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/sucursales">Sucursales</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/empleados">Empleados</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/proveedores">Proveedores</a> </li>
+                        {{-- dentro de productos voy a tener 2 links. Productos (compras y su abm) y categorias --}}
+                        <li class="nav-item"> <a class="nav-link" href="/articulos">Articulos</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="{{url('/reportes')}}">Reportes</a> </li>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Salir') }}
-                                    </a>
+                        @endif
+                        
+                        @endauth
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
+                        @guest
+                        <li class="nav-item"> <a class="nav-link" href="/home">Home </a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/product/list">Productos</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/faq">FAQ's</a> </li>
+                        {{-- <li class="nav-item"> <a class="nav-link" href="./register">Registro</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="./login">Iniciar Sesión</a> </li> --}}
+                        <li class="nav-item"> <a class="nav-link" href="/contact">Contacto</a> </li>
                         @endguest
+                                          
                     </ul>
-                </div>
-            </div>
-        </nav>
-
-        <div class="container">
-            <div class="row">
-            
-                        <div class="col-lg-3">
-                                <h1 class="my-4">Tienda </h1>
-                                <!--Navbar-->
-                                <nav class="navbar navbar-light light-blue lighten-4">
-                                    <!-- Navbar brand --><a class="navbar-brand d-lg-none" href="#">Menu</a>
-                                    <!-- Collapse button -->
-                                    <button class="navbar-toggler toggler-example d-lg-none" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"><span class="dark-blue-text">
-                                            <iclass="fas fa-bars fa-1x"></i>
-                                        </span></button>
-                                    <!-- Collapsible content -->
-                                    <div class="collapse navbar-collapse d-lg-block" id="navbarSupportedContent1">
-                                        <!-- Links -->
-                                        <ul class="navbar-nav mr-auto">
-                                            
-
-                                            @auth
-                                                @if (Auth::user()->role != 'ADMIN_ROLE')
-                                                <li class="nav-item"> <a class="nav-link" href="/home">Home </a> </li>
-                                                <li class="nav-item"> <a class="nav-link" href="/product/list">Productos</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" href="/carrito">Carrito</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" href="/faq">FAQ's</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" href="/contact">Contacto</a> </li>
-                                                @else
-                                                <li class="nav-item"> <a class="nav-link" href="/cuentas">Cuentas</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" href="/sucursales">Sucursales</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" href="/empleados">Empleados</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" href="/proveedores">Proveedores</a> </li>
-                                                {{-- dentro de productos voy a tener 2 links. Productos (compras y su abm) y categorias --}}
-                                                <li class="nav-item"> <a class="nav-link" href="/articulos">Articulos</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" href="{{url('/reportes')}}">Reportes</a> </li>
-
-                                                @endif
-                                                
-                                            @endauth
-
-                                            @guest
-                                            <li class="nav-item"> <a class="nav-link" href="/home">Home </a> </li>
-                                            <li class="nav-item"> <a class="nav-link" href="/product/list">Productos</a> </li>
-                                            <li class="nav-item"> <a class="nav-link" href="/faq">FAQ's</a> </li>
-                                            {{-- <li class="nav-item"> <a class="nav-link" href="./register">Registro</a> </li>
-                                            <li class="nav-item"> <a class="nav-link" href="./login">Iniciar Sesión</a> </li> --}}
-                                            <li class="nav-item"> <a class="nav-link" href="/contact">Contacto</a> </li>
-                                            @endguest
-                                           
-                                        									
-                                        </ul>
-                                    </div>
-                                </nav>
-                            </div>
-                
-                <div class="col-lg-9 col-md-6 mb-4">
-                    <div class="row">
-                        <div class="my-4 col-lg-12 col-md-6 mb-4">
-                            <!-- ACA VA TODO EL CODIGO  -->
-                            @yield('content')
-                            <!-- ACA VA TODO EL CODIGO  -->
-                           
-                        </div>
-                    </div>
-                </div>
+                  </div>                        
             </div>
         </div>
-        
+    </header> 
 
-        <footer id="footer" class="footer-1">
+    
+        <div class="container">
+            <div class="my-4 col-lg-12 col-md-6 mb-4">
+                <!-- ACA VA TODO EL CODIGO  -->
+                @yield('content')
+                <!-- ACA VA TODO EL CODIGO  -->
+            </div>
+        </div>
+   
+ 
+
+    <footer id="footer" class="footer-1">
             <div class="main-footer widgets-dark typo-light">
             <div class="container">
             <div class="row">
@@ -250,9 +241,11 @@
                  </div>
             </div>
             
-            </footer>
-     </div>
+     </footer>
+       
+     
      <script src="{{ asset('js/app.js') }}"></script>
+     <script src="{{asset('js/effect.js')}}"></script>
      @yield('scripts')
 </body>
 </html>

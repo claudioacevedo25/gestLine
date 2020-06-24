@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <h1 class="text-uppercase">detalle de factura</h1><hr>

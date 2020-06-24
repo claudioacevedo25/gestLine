@@ -24,7 +24,7 @@ class Articulo extends Model
 
     
     public function subTotal (){
-        return $this->precio*$this->qty;
+        return $this->precio_venta*$this->qty;
     }
     
 }

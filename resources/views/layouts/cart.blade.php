@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script> 
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script>  --}}
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -159,7 +159,7 @@
                   </div>                        
             </div>
         </div>
-    </header>
+    </header> 
 
     
         <div class="row">
@@ -208,7 +208,7 @@
             <div class="widget no-box">
             <h5 class="widget-title">Comencemos..<span></span></h5>
             <p>Obtene acceso premium a todas las funciones</p>
-            <a class="btn1 btn" href="#." target="_blank">Registrarse</a>
+            <a class="btn btn-primary" href="#." target="_blank">Registrarse</a>
             </div>
             </div>
             

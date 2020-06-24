@@ -1,12 +1,18 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 
 @section('content')
-<div class="container">
+<div class="d-flex justify-content-center">
 
-    <!-- Proveedores-->
-    <div class="col-lg-9 col-md-6 mb-4 faqs">
-        <h2 class="my-4">Alta Sucursal</h2>
+    
+    <div class="col-lg-9 col-md-6 mb-4">
+        <div class="row col-12">
+            <h2 class="my-4">Alta Sucursal</h2>
+            <div class="col-7"></div>
+            <div class="align-content-end">
+                <a href="{{url('/proveedores')}}" class="btn btn-outline-primary">Volver</a>
+            </div>
+        </div>
 
             <div class="card">
                 <div class="card-header">{{ __('Alta Sucursal') }}</div>
@@ -76,7 +82,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn1 btn">
+                                <button type="submit" class="btn btn-primary">
                                     {{ __('Agregar Sucursal') }}
                                 </button>
                             </div>
