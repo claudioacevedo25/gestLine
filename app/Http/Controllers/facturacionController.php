@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 
 class facturacionController extends Controller
@@ -80,16 +81,17 @@ class facturacionController extends Controller
 
    public function detalleFactura($id)
    {
-    $total = 0;
-    $detalle = \DB::select("CALL  detalleFactura($id)");    
-    foreach($detalle as $item){
-        $total += $item->importe;
-    }
-    return view('r_facturacionDetalle')->with([
-        'detalle'=>$detalle,
-        'total'=>$total
-    ]);
 
+        $id_fact=$id;  
+        $total = 0;
+        $detalle = \DB::select("CALL  detalleFactura($id)");    
+        foreach($detalle as $item){
+            $total += $item->importe;
+        }
+
+        $vac = compact('total', 'detalle', 'id_fact');
+        $pdf= PDF::loadView('r_facturacionDetalle', $vac);
+        return $pdf->stream('factura.pdf');
    }
 
 

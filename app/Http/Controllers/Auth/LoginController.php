@@ -36,7 +36,7 @@ class LoginController extends Controller
      protected function authenticated(Request $request, $user)
      {
          if($user->role != 'ADMIN_ROLE'){
-             return redirect('/home');
+             return redirect('/product/list');
          }else{
              return redirect('/reportes/estadisticas');
          }

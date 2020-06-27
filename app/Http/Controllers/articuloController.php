@@ -10,7 +10,6 @@ use App\Proveedores;
 class articuloController extends Controller
 {
     public function listarArticulos(){
-        // $productos = Product::paginate(1);//paginate en vez del metod all();
         $articulos = Articulo::paginate(6);
         $vac = compact('articulos');
         return view('a_listaArticulos',$vac);
@@ -64,6 +63,21 @@ class articuloController extends Controller
 
     public function create( Request $req)
     {
+       
+
+        $reglas = [
+            'name' => ['required', 'string','min:2', 'max:255'],
+            'observaciones' => ['required', 'string','min:2', 'max:1000'],
+            'precio_costo' => ['required', 'numeric', 'min:1','max:100000'],
+            'rentabilidad' => ['required', 'numeric', 'min:1','max:100000'],
+            'stock' => ['required', 'numeric', 'min:1','max:100000'],
+            'image' => ['mimes:jpeg,jpg,png']
+
+        ];
+
+        
+       $this->validate($req,$reglas);
+        
 
         $precio_costo = $req['precio_costo'];
         $rentabilidad = $req['rentabilidad'];
@@ -93,7 +107,7 @@ class articuloController extends Controller
                 $nuevoArticulo->observaciones = $req['observaciones'];
                 $nuevoArticulo->id_proveedor = $req['proveedor'];
                 $nuevoArticulo->id_categoria = $req['categoria'];
-    
+                
                 $nuevoArticulo->save();
             
                 return redirect('/articulos/alta');

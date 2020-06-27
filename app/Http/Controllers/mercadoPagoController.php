@@ -27,7 +27,18 @@ class mercadoPagoController extends Controller
     {
         
         \DB::select("CALL sp_actualizarFactura()");
+        $this->sendWhatsapp();
         session()->forget('cart');
         return redirect('/product/list');
     }
+
+    public function sendWhatsapp()
+    {
+        $url = "https://wa.me/543513390267text=Tienes%20una%20nueva%20venta!";
+        $ch = curl_init($url);
+        curl_exec($ch);
+        curl_close($ch);
+    }
 }
+
+

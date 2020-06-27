@@ -36,7 +36,8 @@
             <th scope="col">Fecha</th>
             <th scope="col">Nombre</th>
             <th scope="col">Total</th>
-            <th scope="col">Ver</th>
+            <th scope="col">Ver en PDF</th>
+        
         </tr>
     </thead>
     <tbody>

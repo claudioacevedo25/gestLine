@@ -10,7 +10,7 @@
             <h2 class="my-4">Alta Articulo</h2>
             <div class="col-8"></div>
             <div class="align-content-end">
-                <a href="{{url('/proveedores')}}" class="btn btn-outline-primary">Volver</a>
+                <a href="{{url('/articulos')}}" class="btn btn-outline-primary">Volver</a>
             </div>
         </div>
 
