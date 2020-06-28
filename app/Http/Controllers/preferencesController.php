@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Articulo;
 use App\Cart;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
 
 class preferencesController extends Controller
 {
@@ -13,7 +13,8 @@ class preferencesController extends Controller
 
     public function stored($id, Request $req)
     {
-        $this->sendWhatsapp();
+     
+        
         $qty = $req['qty'];
         $item = Articulo::findOrFail($id);
       
@@ -81,12 +82,4 @@ class preferencesController extends Controller
     }
 
 
-    public function sendWhatsapp()
-    {
-        $url = "https://wa.me/543513390267?text=Me%20interesa%20el%20auto%20que%20estás%20vendiendo";
-        $ch = curl_init($url);
-        curl_exec($ch);
-        curl_close($ch);
-    }
-   
 }

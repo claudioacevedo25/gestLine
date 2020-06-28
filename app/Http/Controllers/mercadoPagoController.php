@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 
 class mercadoPagoController extends Controller
 {
@@ -27,17 +29,28 @@ class mercadoPagoController extends Controller
     {
         
         \DB::select("CALL sp_actualizarFactura()");
-        $this->sendWhatsapp();
+        $factura = \DB::select("select * from ultimafactura");
+
+        foreach($factura as $item)
+        {
+            $id_factura = $item->ID;
+            $nombreCliente = $item->Nombre;
+        }
+        $this->emailNotification($id_factura, $nombreCliente);
         session()->forget('cart');
         return redirect('/product/list');
     }
 
-    public function sendWhatsapp()
+    public function emailNotification($id_factura, $nombreCliente)
     {
-        $url = "https://wa.me/543513390267text=Tienes%20una%20nueva%20venta!";
-        $ch = curl_init($url);
-        curl_exec($ch);
-        curl_close($ch);
+        $datos = [
+            'titulo' => 'El cliente '.$nombreCliente .' ha realizado una nueva compra.',
+            'contenido'=> "Revisa la facturacion diaria correspondiente a la factura numero " .$id_factura 
+        ];
+
+        MAIL::send('emails.test', $datos, function($mensaje){
+            $mensaje->to('claudioacevedo25@gmail.com', 'Destinatario')->subject('¡Tienes una nueva Venta!');
+        });
     }
 }
 
