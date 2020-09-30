@@ -29,6 +29,9 @@ class CreateUsersTable extends Migration
             $table->integer('id_sucursal');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('id_sucursal')->references('id')->on('sucursales');
+
         });
     }
 
