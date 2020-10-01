@@ -4,23 +4,22 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFacturasTable extends Migration
+class CreateCartsTable extends Migration
 {
-    /**
+   /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('facturas', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha');
-            $table->integer('id_user');
+            $table->bigInteger('id_user')->nullable();
+            $table->timestamp('confirmed_at')->nullable();
             $table->timestamps();
 
-            $table->foreign('id_user')->references('id')->on('users');
-
+          
         });
     }
 
@@ -31,6 +30,6 @@ class CreateFacturasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('facturas');
+        Schema::dropIfExists('carts');
     }
 }

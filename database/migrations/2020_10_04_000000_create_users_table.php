@@ -26,11 +26,11 @@ class CreateUsersTable extends Migration
             $table->string('fecha_nacimiento')->default(null);
             $table->string('role')->default('CLIENT_ROLE');
             $table->tinyInteger('estado');
-            $table->integer('id_sucursal');
+            $table->bigInteger('id_sucursal');
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('id_sucursal')->references('id')->on('sucursales');
+           
 
         });
     }

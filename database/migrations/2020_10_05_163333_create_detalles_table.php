@@ -15,16 +15,15 @@ class CreateDetallesTable extends Migration
     {
         Schema::create('detalles', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_factura');
-            $table->integer('id_articulo');
+            $table->bigInteger('id_factura');
+            $table->bigInteger('id_articulo');
             $table->string('observaciones');
             $table->float('precio_unitario');
             $table->integer('cantidad');
             $table->timestamps();
 
 
-            $table->foreign('id_factura')->references('id')->on('facturas');
-            $table->foreign('id_articulo')->references('id')->on('articulos');
+           
 
         });
     }

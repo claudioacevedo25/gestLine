@@ -23,13 +23,12 @@ class CreateArticulosTable extends Migration
             $table->integer('qty');
             $table->string('img');
             $table->string('observaciones');
-            $table->integer('id_proveedor');
-            $table->integer('id_categoria');
+            $table->bigInteger('id_proveedor');
+            $table->bigInteger('id_categoria');
             $table->tinyInteger('estado')->default(1);
             $table->timestamps();
 
-            $table->foreign('id_proveedor')->references('id')->on('proveedores');
-            $table->foreign('id_categoria')->references('id')->on('categorias');
+           
 
         });
     }

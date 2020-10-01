@@ -20,10 +20,10 @@ class CreateProveedoresTable extends Migration
             $table->integer('telefono');
             $table->string('email')->nullable();
             $table->tinyInteger('estado')->default(1);
-            $table->integer('id_rubro');
+            $table->bigInteger('id_rubro');
             $table->timestamps();
 
-            $table->foreign('id_rubro')->references('id')->on('rubros');
+           
 
         });
     }
