@@ -90,7 +90,7 @@ class cartController extends Controller
             //ACA VA EL PROCEDIMIENTO ALMACENADO QUE CARGA EL DETALLE DE FACTURA
             \DB::select("CALL sp_agregarDetalleFactura($id_articulo,$cantidad)"); 
            
-            $item = new \MercadoPago\Item();    
+            $item = new \MercadoPago\Item();     
             $item->title = $product->nombre;
             $item->quantity = $cantidad;
             $item->currency_id = $product->moneda;

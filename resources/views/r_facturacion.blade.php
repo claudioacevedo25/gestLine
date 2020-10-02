@@ -38,7 +38,7 @@
             <th scope="col">Total</th>
             <th scope="col">Ver en PDF</th>
         
-        </tr>
+        </tr> 
     </thead>
     <tbody>
         @foreach ($facturacion as $item)
@@ -47,7 +47,7 @@
                 <td>{{$item->id}}</td>
                 <td>{{$item->fecha}}</td>
                 <td>{{$item->Nombre}}</td>
-                <td>$ {{$item->Total}}</td>
+                <td>$ {{number_Format($item->Total, $decimal =2)}}</td>
                 <td>
                     <form action="{{url('/reportes/facturacion/verDetalle',$item->id)}}" method="post" class="form-inline">
                         @csrf

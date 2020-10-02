@@ -7,6 +7,17 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
+
+## Steps to Clone repo and run proyect 
+- Git clone repo
+-Composer update
+-Create .env
+-php artisan key:generate
+-Copy config de .env with mailgun y acces point to mercadopago
+-php artisan storage:link
+-Copy folders imgArticulos & ImgUser to folder
+public->storage
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

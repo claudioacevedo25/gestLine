@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-10-2020 a las 07:53:17
+-- Tiempo de generación: 02-10-2020 a las 05:19:08
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.10
 
@@ -20,6 +20,51 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `gestline`
 --
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `consultaBill` (IN `mes` INT, IN `anx` INT)  BEGIN
+ SELECT f.id, f.fecha, concat_ws(' , ',u.nombre, u.apellido) as 'Nombre', SUM(d.importe) as 'Total'
+ FROM facturas f JOIN users u on f.id_user = u.id
+ JOIN detalles d on d.id_factura=f.id
+ where f.estado = 1 and MONTH(f.fecha) = mes and YEAR(f.fecha)= anx
+GROUP BY f.id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `consultaBill_PorFecha` (IN `fecha` DATE)  BEGIN
+ SELECT f.id, f.fecha, concat_ws(' , ',u.nombre, u.apellido) as 'Nombre', SUM(d.importe) as 'Total'
+ FROM facturas f JOIN users u on f.id_user = u.id
+ JOIN detalles d on d.id_factura=f.id
+ where f.estado = 1 and f.fecha = fecha
+GROUP BY f.id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `detalleFactura` (IN `id` INT)  BEGIN
+SELECT f.id,d.id_articulo,a.nombre,a.observaciones ,d.precio_unitario,d.cantidad,d.importe FROM facturas f JOIN detalles d on d.id_factura=f.id JOIN articulos a on a.id = d.id_articulo where f.estado = 1 and f.id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizarFactura` ()  BEGIN
+	SET @id_factura = ( SELECT MAX(id) FROM facturas);
+
+UPDATE facturas f
+set f.estado = 1
+WHERE f.id = @id_factura;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_agregarDetalleFactura` (IN `id_articulo` INT, IN `qty` INT)  BEGIN
+SET @id_factura = ( SELECT MAX(id) FROM facturas); 
+SET @p_u = (SELECT a.precio_venta from articulos a WHERE a.id = id_articulo);
+SET @imp = (@p_u*qty);
+INSERT INTO detalles (id_articulo, id_factura, precio_unitario, importe, cantidad ) VALUES (id_articulo, @id_factura, @p_u,@imp, qty);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarFactura` (IN `id` INT)  BEGIN 
+ INSERT INTO facturas (id_user) VALUES (id);
+ END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -49,13 +94,13 @@ CREATE TABLE `articulos` (
 --
 
 INSERT INTO `articulos` (`id`, `nombre`, `precio_costo`, `rentabilidad`, `precio_venta`, `stock`, `qty`, `img`, `observaciones`, `id_proveedor`, `id_categoria`, `estado`, `created_at`, `updated_at`) VALUES
-(2, 'GALLETAS NEVARES BOQUITAS DE LIMON X 45 GR.', 14.00, 35, 18.90, 15, 0, 'O6pVb2OPfAnR2WrTg1stdHMjsUcr5qSY7PbE2Sos.jpeg', 'GALLETAS NEVARES BOQUITAS DE LIMON X 45 GR.', 4, 13, 1, NULL, NULL),
-(3, 'CEREAL KELLOGGS ZUCARITAS X 220 GR.', 131.00, 30, 170.30, 20, 0, 'l4WpdLITqz978mcm8KksIHBChNWsdBiuP81pLYvH.jpeg', 'CEREAL KELLOGGS ZUCARITAS X 220 GR.', 4, 13, 1, NULL, NULL),
-(4, 'CEREAL KELLOGGS CORN FLAKES X 160 GR.', 106.00, 30, 137.80, 20, 0, 'm2wiMiTAbwepqqy8vNF3wIJjHbU0kYQTEGnXplH8.jpeg', 'CEREAL KELLOGGS CORN FLAKES X 160 GR.', 4, 13, 1, NULL, NULL),
-(5, 'CEREAL NESQUIK INTEGRAL X 230 GR.', 190.00, 36, 258.40, 10, 0, '2guQGG6750U89QJTFxzabzvpBqvqC86h5fP3qKTJ.jpeg', 'CEREAL NESQUIK INTEGRAL X 230 GR.', 4, 13, 1, NULL, NULL),
+(2, 'GALLETAS NEVARES BOQUITAS DE LIMON X 45 GR.', 14.00, 35, 18.90, 15, 2, 'O6pVb2OPfAnR2WrTg1stdHMjsUcr5qSY7PbE2Sos.jpeg', 'GALLETAS NEVARES BOQUITAS DE LIMON X 45 GR.', 4, 13, 1, NULL, NULL),
+(3, 'CEREAL KELLOGGS ZUCARITAS X 220 GR.', 131.00, 30, 170.30, 20, 1, 'l4WpdLITqz978mcm8KksIHBChNWsdBiuP81pLYvH.jpeg', 'CEREAL KELLOGGS ZUCARITAS X 220 GR.', 4, 13, 1, NULL, NULL),
+(4, 'CEREAL KELLOGGS CORN FLAKES X 160 GR.', 106.00, 30, 137.80, 20, 2, 'm2wiMiTAbwepqqy8vNF3wIJjHbU0kYQTEGnXplH8.jpeg', 'CEREAL KELLOGGS CORN FLAKES X 160 GR.', 4, 13, 1, NULL, NULL),
+(5, 'CEREAL NESQUIK INTEGRAL X 230 GR.', 190.00, 36, 258.40, 10, 1, '2guQGG6750U89QJTFxzabzvpBqvqC86h5fP3qKTJ.jpeg', 'CEREAL NESQUIK INTEGRAL X 230 GR.', 4, 13, 1, NULL, NULL),
 (6, 'ACEITE DE GIRASOL CAÑUELAS X 1.5 LT.', 157.00, 29, 202.53, 50, 0, 'PpNUrv622ekHDcl4icwYoAvTmV3V20uZ0hlZFYol.jpeg', 'ACEITE DE GIRASOL CAÑUELAS X 1.5 LT.', 4, 13, 1, NULL, NULL),
-(7, 'ACEITE DE OLIVA COCINERO COMUN X 250 ML.', 156.00, 35, 210.60, 30, 2, 'FpaOenDZBBKhtyRWD47aW1mKPHpJbFXFFmgQjOgT.jpeg', 'ACEITE DE OLIVA COCINERO COMUN X 250 ML.', 4, 13, 1, NULL, NULL),
-(8, 'JABON EN POLVO ALA MATIC CLASICO X 400 GR.', 112.00, 40, 156.80, 20, 2, 'e03UNatkRfGV8lvJoRK7hQ3IhTSSIp5ZP38Pvh5R.jpeg', 'JABON EN POLVO ALA MATIC CLASICO X 400 GR.', 5, 15, 1, NULL, NULL),
+(7, 'ACEITE DE OLIVA COCINERO COMUN X 250 ML.', 156.00, 35, 210.60, 30, 1, 'FpaOenDZBBKhtyRWD47aW1mKPHpJbFXFFmgQjOgT.jpeg', 'ACEITE DE OLIVA COCINERO COMUN X 250 ML.', 4, 13, 1, NULL, NULL),
+(8, 'JABON EN POLVO ALA MATIC CLASICO X 400 GR.', 112.00, 40, 156.80, 20, 3, 'e03UNatkRfGV8lvJoRK7hQ3IhTSSIp5ZP38Pvh5R.jpeg', 'JABON EN POLVO ALA MATIC CLASICO X 400 GR.', 5, 15, 1, NULL, NULL),
 (9, 'CERVEZA IMPERIAL AMBER LAGER LATA X 473 CC. PACK X 6 UN.', 450.00, 15, 517.50, 15, 1, 'MJcJlNIKVEMxtqfzowCN4gyPxLljcsK80o3nO1rv.jpeg', 'CERVEZA IMPERIAL AMBER LAGER LATA X 473 CC. PACK X 6 UN.', 6, 14, 1, NULL, NULL),
 (10, 'YOGUR SANCOR YOGS BEBIBLE ENTERO DURAZNO SACHET X 900 GR.', 79.00, 20, 94.80, 13, 1, '7NEP9Nl1bCNTJ3EDyLucsuCWYUWoWAs1qEtc380a.jpeg', 'YOGUR SANCOR YOGS BEBIBLE ENTERO DURAZNO SACHET X 900 GR.', 7, 16, 1, NULL, NULL);
 
@@ -81,7 +126,17 @@ INSERT INTO `articulo_cart` (`id`, `articulo_id`, `cart_id`, `created_at`, `upda
 (1, 9, 2, NULL, NULL),
 (2, 8, 2, NULL, NULL),
 (3, 10, 3, NULL, NULL),
-(4, 7, 3, NULL, NULL);
+(4, 7, 3, NULL, NULL),
+(5, 3, 4, NULL, NULL),
+(6, 9, 4, NULL, NULL),
+(7, 5, 5, NULL, NULL),
+(8, 3, 5, NULL, NULL),
+(9, 2, 6, NULL, NULL),
+(10, 8, 6, NULL, NULL),
+(11, 4, 6, NULL, NULL),
+(12, 9, 6, NULL, NULL),
+(13, 7, 7, NULL, NULL),
+(14, 5, 7, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -104,7 +159,11 @@ CREATE TABLE `carts` (
 INSERT INTO `carts` (`id`, `id_user`, `confirmed_at`, `created_at`, `updated_at`) VALUES
 (1, 2, NULL, '2020-10-01 08:42:30', '2020-10-01 08:42:30'),
 (2, 2, NULL, '2020-10-01 08:48:06', '2020-10-01 08:48:06'),
-(3, 2, NULL, '2020-10-01 08:48:39', '2020-10-01 08:48:39');
+(3, 2, NULL, '2020-10-01 08:48:39', '2020-10-01 08:48:39'),
+(4, 2, NULL, '2020-10-01 09:15:38', '2020-10-01 09:15:38'),
+(5, 2, NULL, '2020-10-01 18:53:32', '2020-10-01 18:53:32'),
+(6, 2, NULL, '2020-10-02 04:35:22', '2020-10-02 04:35:22'),
+(7, 2, NULL, '2020-10-02 05:13:34', '2020-10-02 05:13:34');
 
 -- --------------------------------------------------------
 
@@ -141,12 +200,24 @@ CREATE TABLE `detalles` (
   `id` int(255) NOT NULL,
   `id_factura` int(255) NOT NULL,
   `id_articulo` int(255) NOT NULL,
-  `observaciones` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `precio_unitario` double(8,2) NOT NULL,
+  `importe` float NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `detalles`
+--
+
+INSERT INTO `detalles` (`id`, `id_factura`, `id_articulo`, `precio_unitario`, `importe`, `cantidad`, `created_at`, `updated_at`) VALUES
+(22, 10, 2, 18.90, 37.8, 2, '2020-10-02 01:58:13', NULL),
+(23, 10, 8, 156.80, 470.4, 3, '2020-10-02 01:58:13', NULL),
+(24, 10, 4, 137.80, 275.6, 2, '2020-10-02 01:58:13', NULL),
+(25, 10, 9, 517.50, 517.5, 1, '2020-10-02 01:58:13', NULL),
+(26, 11, 7, 210.60, 210.6, 1, '2020-10-02 02:13:46', NULL),
+(27, 11, 5, 258.40, 258.4, 1, '2020-10-02 02:13:46', NULL);
 
 -- --------------------------------------------------------
 
@@ -156,11 +227,20 @@ CREATE TABLE `detalles` (
 
 CREATE TABLE `facturas` (
   `id` int(255) NOT NULL,
-  `fecha` date NOT NULL,
+  `fecha` date NOT NULL DEFAULT current_timestamp(),
   `id_user` int(255) NOT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `facturas`
+--
+
+INSERT INTO `facturas` (`id`, `fecha`, `id_user`, `estado`, `created_at`, `updated_at`) VALUES
+(10, '2020-10-01', 2, 1, NULL, NULL),
+(11, '2020-10-01', 2, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -330,7 +410,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `nombre`, `apellido`, `dni`, `direccion`, `email`, `email_verified_at`, `password`, `foto`, `fecha_nacimiento`, `role`, `estado`, `id_sucursal`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Maxi', 'Acevedo', 32107572, 'Buchard', 'claudioacevedo25@gmail.com', NULL, '$2y$10$MsOMK34d6Jsi8monmPuG8Om9yNHfut7IxG/u6hV87KFgIxAK.eoX6', 'm3Wl2Kfkrh9eHxw8UMF0R6rxL0tuWToxQwi5o2dp.jpeg', '1986-12-23', 'ADMIN_ROLE', 1, 1, NULL, '2020-10-01 08:06:45', '2020-10-01 08:20:26'),
-(2, 'Pedro', NULL, NULL, NULL, 'pedrocapo@gmail.com', NULL, '$2y$10$FmFGkmmUJd6YkdDnQDCKmuMQ1tAXs2edvsg79NglBZpb2Lu0mzBAy', NULL, NULL, 'CLIENT_ROLE', 1, NULL, NULL, '2020-10-01 08:41:43', '2020-10-01 08:41:43');
+(2, 'Pedro', 'Capo', NULL, NULL, 'pedrocapo@gmail.com', NULL, '$2y$10$FmFGkmmUJd6YkdDnQDCKmuMQ1tAXs2edvsg79NglBZpb2Lu0mzBAy', NULL, NULL, 'CLIENT_ROLE', 1, NULL, 'MFvnbDH7ymiQrPRJFeoMRRnYsxDS4bNghF5qxs5gAjtcr9YDBxHY8ZltIwaR', '2020-10-01 08:41:43', '2020-10-01 08:41:43');
 
 --
 -- Índices para tablas volcadas
@@ -370,8 +450,8 @@ ALTER TABLE `categorias`
 --
 ALTER TABLE `detalles`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_id_articuloxdetalle` (`id_articulo`),
-  ADD KEY `fk_id_facturaxdetalle` (`id_factura`);
+  ADD KEY `fk_id_facturaxdetalle` (`id_factura`),
+  ADD KEY `fk_id_articuloxdetalle` (`id_articulo`);
 
 --
 -- Indices de la tabla `facturas`
@@ -439,13 +519,13 @@ ALTER TABLE `articulos`
 -- AUTO_INCREMENT de la tabla `articulo_cart`
 --
 ALTER TABLE `articulo_cart`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -457,13 +537,13 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `facturas`
 --
 ALTER TABLE `facturas`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`
@@ -527,7 +607,7 @@ ALTER TABLE `carts`
 -- Filtros para la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  ADD CONSTRAINT `fk_id_facturaxdetalle` FOREIGN KEY (`id_factura`) REFERENCES `facturas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_id_articuloxdetalle` FOREIGN KEY (`id_articulo`) REFERENCES `articulos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `facturas`

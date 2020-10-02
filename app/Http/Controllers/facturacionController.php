@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Type\Decimal;
 
 class facturacionController extends Controller
 {
@@ -18,14 +19,14 @@ class facturacionController extends Controller
         $total = 0;
         $anx = substr($fecha,0,4);
         $mes = substr($fecha,5,2);
-        
         $facturacion = \DB::select("CALL  consultaBill ($mes,$anx)");    
         foreach($facturacion as $item){
             $total += $item->Total;
+            
         }
-        return view('r_facturacion')->with([
+        return view('r_facturacion')->with([ 
             'facturacion'=>$facturacion,
-            'total'=>$total
+            'total'=>number_Format($total, $Decimal=2)
         ]);
 
    }
