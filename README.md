@@ -9,14 +9,14 @@
 
 
 ## Steps to Clone repo and run proyect 
-- Git clone repo.
--Composer update.
--Create .env .
--php artisan key:generate.
--Copy config de .env with mailgun y acces point to mercadopago.
--php artisan storage:link.
--Copy folders imgArticulos & ImgUser to folder
-public->storage.
+- Git clone repo
+- Composer update
+- Create .env 
+- php artisan key:generate
+- Copy config de .env with mailgun y acces point to mercadopago
+- php artisan storage:link
+- Copy folders imgArticulos & ImgUser to folder
+public->storage
 
 ## About Laravel
 
