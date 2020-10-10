@@ -13,9 +13,10 @@ class estadisticasController extends Controller
 
     public function indexGraficaMes(Request $req)
     {
-        $facturadoPorMeses = \DB::select('select * from facturadopormes');
-        return response(json_encode($facturadoPorMeses),200)->header('Content-type', 'text/plain');
+        $facturadoPoranx = \DB::select('select * from facturadopormes');
+        return response(json_encode($facturadoPoranx),200)->header('Content-type', 'text/plain');
     }
+
     public function indexGraficaAnx(Request $req)
     {
         $facturadoPoranx = \DB::select('select * from facturadoporanx');

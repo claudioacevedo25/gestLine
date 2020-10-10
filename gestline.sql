@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-10-2020 a las 05:19:08
+-- Tiempo de generación: 10-10-2020 a las 16:41:59
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.10
 
@@ -33,6 +33,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `consultaBill` (IN `mes` INT, IN `an
 GROUP BY f.id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `consultaBill_NOW` ()  BEGIN
+ SELECT f.id, f.fecha, concat_ws(' , ',u.nombre, u.apellido) as 'Nombre', SUM(d.importe) as 'Total'
+ FROM facturas f JOIN users u on f.id_user = u.id
+ JOIN detalles d on d.id_factura=f.id
+ where f.estado = 1 and f.fecha = CURDATE()
+GROUP BY f.id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `consultaBill_PorANX` ()  BEGIN
+ SELECT f.id, f.fecha, concat_ws(' , ',u.nombre, u.apellido) as 'Nombre', SUM(d.importe) as 'Total'
+ FROM facturas f JOIN users u on f.id_user = u.id
+ JOIN detalles d on d.id_factura=f.id
+ where f.estado = 1 and YEAR(f.fecha) = YEAR(CURDATE()) 
+GROUP BY f.id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `consultaBill_PorFecha` (IN `fecha` DATE)  BEGIN
  SELECT f.id, f.fecha, concat_ws(' , ',u.nombre, u.apellido) as 'Nombre', SUM(d.importe) as 'Total'
  FROM facturas f JOIN users u on f.id_user = u.id
@@ -58,6 +74,8 @@ SET @id_factura = ( SELECT MAX(id) FROM facturas);
 SET @p_u = (SELECT a.precio_venta from articulos a WHERE a.id = id_articulo);
 SET @imp = (@p_u*qty);
 INSERT INTO detalles (id_articulo, id_factura, precio_unitario, importe, cantidad ) VALUES (id_articulo, @id_factura, @p_u,@imp, qty);
+UPDATE articulos SET stock = stock-qty 
+WHERE id = id_articulo;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarFactura` (IN `id` INT)  BEGIN 
@@ -94,7 +112,7 @@ CREATE TABLE `articulos` (
 --
 
 INSERT INTO `articulos` (`id`, `nombre`, `precio_costo`, `rentabilidad`, `precio_venta`, `stock`, `qty`, `img`, `observaciones`, `id_proveedor`, `id_categoria`, `estado`, `created_at`, `updated_at`) VALUES
-(2, 'GALLETAS NEVARES BOQUITAS DE LIMON X 45 GR.', 14.00, 35, 18.90, 15, 2, 'O6pVb2OPfAnR2WrTg1stdHMjsUcr5qSY7PbE2Sos.jpeg', 'GALLETAS NEVARES BOQUITAS DE LIMON X 45 GR.', 4, 13, 1, NULL, NULL),
+(2, 'GALLETAS NEVARES BOQUITAS DE LIMON X 45 GR.', 14.00, 35, 18.90, 10, 5, 'O6pVb2OPfAnR2WrTg1stdHMjsUcr5qSY7PbE2Sos.jpeg', 'GALLETAS NEVARES BOQUITAS DE LIMON X 45 GR.', 4, 13, 1, NULL, NULL),
 (3, 'CEREAL KELLOGGS ZUCARITAS X 220 GR.', 131.00, 30, 170.30, 20, 1, 'l4WpdLITqz978mcm8KksIHBChNWsdBiuP81pLYvH.jpeg', 'CEREAL KELLOGGS ZUCARITAS X 220 GR.', 4, 13, 1, NULL, NULL),
 (4, 'CEREAL KELLOGGS CORN FLAKES X 160 GR.', 106.00, 30, 137.80, 20, 2, 'm2wiMiTAbwepqqy8vNF3wIJjHbU0kYQTEGnXplH8.jpeg', 'CEREAL KELLOGGS CORN FLAKES X 160 GR.', 4, 13, 1, NULL, NULL),
 (5, 'CEREAL NESQUIK INTEGRAL X 230 GR.', 190.00, 36, 258.40, 10, 1, '2guQGG6750U89QJTFxzabzvpBqvqC86h5fP3qKTJ.jpeg', 'CEREAL NESQUIK INTEGRAL X 230 GR.', 4, 13, 1, NULL, NULL),
@@ -136,7 +154,8 @@ INSERT INTO `articulo_cart` (`id`, `articulo_id`, `cart_id`, `created_at`, `upda
 (11, 4, 6, NULL, NULL),
 (12, 9, 6, NULL, NULL),
 (13, 7, 7, NULL, NULL),
-(14, 5, 7, NULL, NULL);
+(14, 5, 7, NULL, NULL),
+(15, 2, 8, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -163,7 +182,8 @@ INSERT INTO `carts` (`id`, `id_user`, `confirmed_at`, `created_at`, `updated_at`
 (4, 2, NULL, '2020-10-01 09:15:38', '2020-10-01 09:15:38'),
 (5, 2, NULL, '2020-10-01 18:53:32', '2020-10-01 18:53:32'),
 (6, 2, NULL, '2020-10-02 04:35:22', '2020-10-02 04:35:22'),
-(7, 2, NULL, '2020-10-02 05:13:34', '2020-10-02 05:13:34');
+(7, 2, NULL, '2020-10-02 05:13:34', '2020-10-02 05:13:34'),
+(8, 2, NULL, '2020-10-07 16:23:58', '2020-10-07 16:23:58');
 
 -- --------------------------------------------------------
 
@@ -217,7 +237,31 @@ INSERT INTO `detalles` (`id`, `id_factura`, `id_articulo`, `precio_unitario`, `i
 (24, 10, 4, 137.80, 275.6, 2, '2020-10-02 01:58:13', NULL),
 (25, 10, 9, 517.50, 517.5, 1, '2020-10-02 01:58:13', NULL),
 (26, 11, 7, 210.60, 210.6, 1, '2020-10-02 02:13:46', NULL),
-(27, 11, 5, 258.40, 258.4, 1, '2020-10-02 02:13:46', NULL);
+(27, 11, 5, 258.40, 258.4, 1, '2020-10-02 02:13:46', NULL),
+(28, 12, 2, 18.90, 94.5, 5, '2020-10-07 13:28:58', NULL),
+(29, 13, 5, 123.00, 123, 1, '2020-09-21 16:05:21', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `facturadoporanx`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `facturadoporanx` (
+`Anx` int(4)
+,`Importe` double(19,2)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `facturadopormes`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `facturadopormes` (
+`Mes` varchar(9)
+,`Total` double(19,2)
+);
 
 -- --------------------------------------------------------
 
@@ -240,7 +284,9 @@ CREATE TABLE `facturas` (
 
 INSERT INTO `facturas` (`id`, `fecha`, `id_user`, `estado`, `created_at`, `updated_at`) VALUES
 (10, '2020-10-01', 2, 1, NULL, NULL),
-(11, '2020-10-01', 2, 1, NULL, NULL);
+(11, '2020-10-01', 2, 1, NULL, NULL),
+(12, '2020-10-07', 2, 1, NULL, NULL),
+(13, '2020-09-21', 2, 1, '2020-09-21 16:03:51', NULL);
 
 -- --------------------------------------------------------
 
@@ -333,6 +379,17 @@ INSERT INTO `proveedores` (`id`, `razon_social`, `direccion`, `telefono`, `email
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `registroclientesmes`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `registroclientesmes` (
+`Mes` varchar(9)
+,`Total` bigint(21)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `rubros`
 --
 
@@ -358,6 +415,18 @@ INSERT INTO `rubros` (`id`, `detalle`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `stockmenor_veinte`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `stockmenor_veinte` (
+`Id` int(255)
+,`Nombre` varchar(255)
+,`Stock` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `sucursales`
 --
 
@@ -378,6 +447,41 @@ CREATE TABLE `sucursales` (
 
 INSERT INTO `sucursales` (`id`, `razon_social`, `direccion`, `telefono`, `email`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 'GestMax', 'Colon 1500', 4666569, 'gestmax@gestline.com', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `topcinco`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `topcinco` (
+`id_articulo` int(255)
+,`Nombre` varchar(255)
+,`Cantidad` decimal(32,0)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `top_clientes`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `top_clientes` (
+`Id` int(255)
+,`Nombre` varchar(512)
+,`Cantidad_facturas` bigint(21)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `ultimafactura`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `ultimafactura` (
+`ID` int(255)
+,`Nombre` varchar(512)
+);
 
 -- --------------------------------------------------------
 
@@ -409,8 +513,71 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nombre`, `apellido`, `dni`, `direccion`, `email`, `email_verified_at`, `password`, `foto`, `fecha_nacimiento`, `role`, `estado`, `id_sucursal`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Maxi', 'Acevedo', 32107572, 'Buchard', 'claudioacevedo25@gmail.com', NULL, '$2y$10$MsOMK34d6Jsi8monmPuG8Om9yNHfut7IxG/u6hV87KFgIxAK.eoX6', 'm3Wl2Kfkrh9eHxw8UMF0R6rxL0tuWToxQwi5o2dp.jpeg', '1986-12-23', 'ADMIN_ROLE', 1, 1, NULL, '2020-10-01 08:06:45', '2020-10-01 08:20:26'),
+(1, 'Maxi', 'Acevedo', 32107572, 'Buchard', 'claudioacevedo25@gmail.com', NULL, '$2y$10$MsOMK34d6Jsi8monmPuG8Om9yNHfut7IxG/u6hV87KFgIxAK.eoX6', 'm3Wl2Kfkrh9eHxw8UMF0R6rxL0tuWToxQwi5o2dp.jpeg', '1986-12-23', 'ADMIN_ROLE', 1, 1, 'Y0Pxu1LKGXbPmicQ9SeHctmCCN3WNngU3jZRlQIDlujrSIybK9TFNiOT75Pv', '2020-10-01 08:06:45', '2020-10-01 08:20:26'),
 (2, 'Pedro', 'Capo', NULL, NULL, 'pedrocapo@gmail.com', NULL, '$2y$10$FmFGkmmUJd6YkdDnQDCKmuMQ1tAXs2edvsg79NglBZpb2Lu0mzBAy', NULL, NULL, 'CLIENT_ROLE', 1, NULL, 'MFvnbDH7ymiQrPRJFeoMRRnYsxDS4bNghF5qxs5gAjtcr9YDBxHY8ZltIwaR', '2020-10-01 08:41:43', '2020-10-01 08:41:43');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `facturadoporanx`
+--
+DROP TABLE IF EXISTS `facturadoporanx`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `facturadoporanx`  AS  select year(`f`.`fecha`) AS `Anx`,truncate(sum(`d`.`importe`),2) AS `Importe` from ((`facturas` `f` join `detalles` `d` on(`f`.`id` = `d`.`id_factura`)) join `users` `u` on(`u`.`id` = `f`.`id_user`)) group by year(`f`.`fecha`) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `facturadopormes`
+--
+DROP TABLE IF EXISTS `facturadopormes`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `facturadopormes`  AS  select monthname(`f`.`fecha`) AS `Mes`,truncate(sum(`d`.`importe`),2) AS `Total` from ((`facturas` `f` join `detalles` `d` on(`f`.`id` = `d`.`id_factura`)) join `users` `u` on(`u`.`id` = `f`.`id_user`)) group by monthname(`f`.`fecha`) order by 1 desc ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `registroclientesmes`
+--
+DROP TABLE IF EXISTS `registroclientesmes`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `registroclientesmes`  AS  select monthname(`u`.`created_at`) AS `Mes`,count(`u`.`id`) AS `Total` from `users` `u` where `u`.`estado` = 1 and `u`.`role`  not like 'ADMIN_ROLE' and `u`.`role`  not like 'EMPLOYEE_ROLE' group by monthname(`u`.`created_at`) order by monthname(`u`.`created_at`) desc ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `stockmenor_veinte`
+--
+DROP TABLE IF EXISTS `stockmenor_veinte`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `stockmenor_veinte`  AS  select `a`.`id` AS `Id`,`a`.`nombre` AS `Nombre`,`a`.`stock` AS `Stock` from `articulos` `a` where `a`.`stock` < 20 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `topcinco`
+--
+DROP TABLE IF EXISTS `topcinco`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `topcinco`  AS  select `d`.`id_articulo` AS `id_articulo`,`a`.`observaciones` AS `Nombre`,sum(`d`.`cantidad`) AS `Cantidad` from ((`detalles` `d` join `facturas` `f` on(`d`.`id_factura` = `f`.`id`)) join `articulos` `a` on(`d`.`id_articulo` = `a`.`id`)) where `f`.`estado` = 1 group by `d`.`id_articulo`,`a`.`observaciones` order by 3 desc limit 5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `top_clientes`
+--
+DROP TABLE IF EXISTS `top_clientes`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `top_clientes`  AS  select `u`.`id` AS `Id`,concat_ws(', ',`u`.`nombre`,`u`.`apellido`) AS `Nombre`,count(`f`.`id`) AS `Cantidad_facturas` from (`facturas` `f` join `users` `u` on(`f`.`id_user` = `u`.`id`)) where `f`.`estado` = 1 group by 1,2 having count(`f`.`id`) > 1 order by 3 desc ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `ultimafactura`
+--
+DROP TABLE IF EXISTS `ultimafactura`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ultimafactura`  AS  select max(`f`.`id`) AS `ID`,concat_ws(', ',`u`.`nombre`,`u`.`apellido`) AS `Nombre` from (`facturas` `f` join `users` `u` on(`f`.`id_user` = `u`.`id`)) group by 2 limit 1 ;
 
 --
 -- Índices para tablas volcadas
@@ -519,13 +686,13 @@ ALTER TABLE `articulos`
 -- AUTO_INCREMENT de la tabla `articulo_cart`
 --
 ALTER TABLE `articulo_cart`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -537,13 +704,13 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `facturas`
 --
 ALTER TABLE `facturas`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`

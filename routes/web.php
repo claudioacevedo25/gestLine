@@ -65,7 +65,7 @@ Route::group(['middleware' => ['auth', 'role']], function () {
     Route::get('/empleados', 'usuariosController@listarEmpleados');
     Route::post('cuentas/delete/{id}', 'usuariosController@delete');
     Route::get('/cuentas/edit/{id}','usuariosController@edit');
-    Route::post('/cuentas/edit/{id}','usuariosController@editPost');
+    Route::post('/cuentas/edit/{id}','usuariosController@editPost'); 
 
     Route::get('/reportes', function(){  return view('r_reportes'); });
     Route::get('/reportes/facturacion', 'facturacionController@index');
@@ -74,9 +74,9 @@ Route::group(['middleware' => ['auth', 'role']], function () {
     Route::get('/reporte/facturacionAnx', 'facturacionController@facturacionAnx');
     Route::post('/reporte/facturacionPorFecha', 'facturacionController@facturacionPorFecha');
     Route::post('/reportes/facturacion/verDetalle/{id}', 'facturacionController@detalleFactura');
-
+ 
     Route::get('/reportes/estadisticas', 'estadisticasController@index');
-    Route::post('/reportes/estadisticas/mes', 'estadisticasController@indexGraficaMes');
+    Route::post('/reportes/estadisticas/pormes', 'estadisticasController@indexGraficaMes');
     Route::post('/reportes/estadisticas/anx', 'estadisticasController@indexGraficaAnx');
     Route::post('/reportes/estadisticas/clientes', 'estadisticasController@indexGraficaClientes');
     Route::post('/reportes/estadisticas/top5', 'estadisticasController@indexGraficaTop5');

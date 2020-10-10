@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('content')
+@section('content') 
 
 <form action="{{url('/reportes/estadisticas')}}" method="post" id="form1">
 @csrf
@@ -121,10 +121,11 @@
     var totalClient=0;
 
     $(document).ready(function(){
+        
         $.ajax({
-            url:'/reportes/estadisticas/mes',
+            url:'/reportes/estadisticas/pormes', 
             method: 'POST',
-            data:$('#form1').serialize()             
+            data:$('#form1').serialize()                 
         }).done(function(res){
             var facturadoPorMeses = JSON.parse(res);
             var lengthMensual = facturadoPorMeses.length;
@@ -143,7 +144,7 @@
             url:'/reportes/estadisticas/anx',
             method: 'POST',
             data:$('#form1').serialize()             
-        }).done(function(res){
+        }).done(function(res){ 
             var facturadoPoranx = JSON.parse(res);
             var lengthAnual = facturadoPoranx.length;
             for(var i=0; i<lengthAnual; i++){
@@ -155,6 +156,7 @@
             avgAnual = 'Promedio Anual: $'+(avgAnual/lengthAnual).toFixed(2);
             $('#avgAnual').append(avgAnual);
         })
+
 
         $.ajax({
             url:'/reportes/estadisticas/clientes',
