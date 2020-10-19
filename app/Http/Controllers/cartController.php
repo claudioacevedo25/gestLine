@@ -43,23 +43,23 @@ class cartController extends Controller
 
     public function deleteItem($id)
     {
-
-        $cart = session('cart')->fresh();
     
-        foreach ($cart->items as $product) {
-            if($product->id == $id){
-               
-               $x = current($cart->items);
-               $xx = key($x);
-                
-                unset($cart->items[$xx]); 
-                
-                session()->put('cart', $cart);
-            
-            }
+        if(session()->has('cart')) {
+        $item = Articulo::findOrFail($id);
+        $cart = session('cart')->fresh();
+        $total = $cart->count();
+        dd($total);
+        if($total == 1){
+            session()->forget('cart');
+        }else{
+             $cart->items()->detach($item);
+             session()->put('cart', $cart);
         }
-        
-        return redirect('/carrito');
+       
+
+        return redirect('/carrito'); 
+        }
+       
     
     }
 
