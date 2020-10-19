@@ -59,7 +59,7 @@ Route::group(['middleware' => ['auth', 'role']], function () {
     Route::get('/articulos/edit/{id}','articuloController@edit');
     Route::get('/articulo/{id}','articuloController@articuloId');
     Route::post('/articulos/edit/{id}','articuloController@editPost')->name('articulo.actualizar');
-    Route::get('/articulos/updateAll','articuloController@updateAll')->name('updateAll'); 
+    Route::post('/articulos/updateAll','articuloController@updateAll')->name('updateAll'); 
 
     Route::get('/cuentas', 'usuariosController@listarUsuarios');
     Route::get('/empleados', 'usuariosController@listarEmpleados');

@@ -21,7 +21,10 @@
     <link href="{{ asset('css/home.css') }}" rel="stylesheet">
     <link href="{{ asset('css/layouts.css') }}" rel="stylesheet">
     {{-- Iconos FONT --}}
-	<script src="https://kit.fontawesome.com/9f3c14b92e.js" crossorigin="anonymous"></script> 
+    <script src="https://kit.fontawesome.com/9f3c14b92e.js" crossorigin="anonymous"></script> 
+    {{-- SWEET ALERT --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.6.1/sweetalert2.min.css">
+
 </head>
 <body>
     <header class="default-header">
@@ -246,6 +249,51 @@
      
      <script src="{{ asset('js/app.js') }}"></script>
      <script src="{{asset('js/effect.js')}}"></script>
+
+     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.6.1/sweetalert2.js"></script>
+   
      @yield('scripts')
+     <script >
+             $('#testForm').submit(function(e) {
+              e.preventDefault();
+              const gan = $('#idGanancia').val()
+              console.log(gan)
+                if(gan === ''){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Olvidaste ingresar un valor para actualizar!',
+                    })
+                }else{
+                     Swal.fire({
+                            title: 'Esta a punto de actualizar masivamente los precios..',
+                            text: "Esta seguro?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Actualizar!'
+                            }).then((result) => {
+                            if (result.isConfirmed) {  
+                            
+                                Swal.fire(
+                                'Exito!',
+                                'Los precios han sido actualizados con éxito!!',
+                                'success'
+                                )
+                                this.submit()
+                            }
+                     })
+                }
+
+               
+
+           
+       });
+     </script>
+   
+
+     
 </body>
 </html>

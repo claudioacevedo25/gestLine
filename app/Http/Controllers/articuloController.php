@@ -130,15 +130,18 @@ class articuloController extends Controller
     }
 
     public function updateAll(Request $req){
-        $porcentaje = $req['ganancia'];
-        $articulos = Articulo::all();
-        foreach($articulos as $articulo){
-            $precioCosto = $articulo->precio_costo;
-            $articulo->rentabilidad = $porcentaje;
-            $articulo->precio_venta = $precioCosto+($precioCosto*$porcentaje/100);
-            $articulo->save();
+      
+        if($req['ganancia']){
+            $porcentaje = $req['ganancia'];
+            $articulos = Articulo::all();
+            foreach($articulos as $articulo){
+                $precioVta = $articulo->precio_venta;
+                $articulo->rentabilidad = $porcentaje;
+                $articulo->precio_venta = $precioVta+($precioVta*$porcentaje/100);
+                $articulo->save();
+            }
         }
-        
+       
         return redirect('/articulos');
     }
 

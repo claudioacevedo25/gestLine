@@ -12,7 +12,7 @@
                 <form action="{{route('search')}}" method="get">
                   <div class="form-group">
                       <div class="input-group">
-                              <input type="text" class="form-control" name="search" id="" placeholder="Buscar...">
+                              <input type="text" class="form-control" name="search"  placeholder="Buscar...">
                               <input type="hidden" name="admin" value="1"> 
                               <span class="input-group-btn">
                                 <button type="submit" class="btn btn-outline-primary">Buscar</button>
@@ -111,10 +111,11 @@
                     </div>
                     <div class="col-4"></div>
                     <div class="col align-self-end">
-                        <form action="{{route('updateAll')}}" method="get">
+                        <form id='testForm' action="{{route('updateAll')}}" method="POST" role="form">
+                            {{ csrf_field() }} 
                           <div class="form-group">
                               <div class="input-group">
-                                      <input type="text" class="form-control" name="ganancia" id="" placeholder="% de ganancia...">
+                                      <input type="number" class="form-control" name="ganancia" id="idGanancia" placeholder="% de ganancia...">
                                       <span class="input-group-btn">
                                         <button type="submit" class="btn btn-outline-primary">Aplicar Masivamente</button>
                                      </span>
