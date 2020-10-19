@@ -189,16 +189,10 @@
             <h5 class="widget-title">Accesos<span></span></h5>
             <ul class="thumbnail-widget">
             <li>
-            <div class="thumb-content"><a href="#.">Home</a></div>	
+            <div class="thumb-content"><a href="/">Home</a></div>	
             </li>
             <li>
-            <div class="thumb-content"><a href="#.">Novedades</a></div>	
-            </li>
-            <li>
-            <div class="thumb-content"><a href="#.">Historias de exito</a></div>	
-            </li>
-            <li>
-            <div class="thumb-content"><a href="#.">Acerca de nosotros</a></div>	
+            <div class="thumb-content"><a href="/faq">Faqs</a></div>	
             </li>
             </ul>
             </div>
@@ -208,7 +202,6 @@
             <div class="widget no-box">
             <h5 class="widget-title">Comencemos..<span></span></h5>
             <p>Obtene acceso premium a todas las funciones</p>
-            <a class="btn btn-primary" href="#." target="_blank">Registrarse</a>
             </div>
             </div>
             
