@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Sucursales;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 
 class usuariosController extends Controller
 {
@@ -63,5 +65,36 @@ class usuariosController extends Controller
         $User->estado = 0;
         $User->save();
         return redirect('/cuentas');
+    }
+
+    public function contactEmail (Request $req)
+    {
+    
+        $reglas = [
+            'name' => ['required', 'string','min:2', 'max:20'],
+            'lastname' => ['required', 'string','min:2', 'max:20'],
+            'email' => ['required', 'email'],
+            'message' => ['required', 'string', 'min:10','max:1000'],
+        ];
+      
+       $this->validate($req,$reglas);
+
+        $nombre = $req['name'];
+        $apellido = $req['lastname'];
+        $email = $req['email'];
+        $telefono = $req['phone'];
+        $mensaje = $req['message'];
+        $alertMessage = 'Gracias por contactar con GESTLINE. A la brevedad nos pondremos en contacto contigo';
+      
+        $datos = [
+            'titulo' => 'El cliente '.$nombre .', '.$apellido.' quiere ponerse en contacto',
+            'contenido'=> "Mensaje: " .$mensaje. ' Mi emial es ' .$email .' y mi telefono es '.$telefono
+        ];
+
+        MAIL::send('emails.test', $datos, function($mensaje){
+            $mensaje->to('claudioacevedo25@gmail.com', 'Destinatario')->subject('¡Tienes un nuevo mensaje de gestline!');
+        });
+
+        return redirect('/contact')->with('success', $alertMessage);
     }
 }

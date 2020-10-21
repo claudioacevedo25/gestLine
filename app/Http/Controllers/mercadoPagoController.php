@@ -51,6 +51,7 @@ class mercadoPagoController extends Controller
         MAIL::send('emails.test', $datos, function($mensaje){
             $mensaje->to('claudioacevedo25@gmail.com', 'Destinatario')->subject('¡Tienes una nueva Venta!');
         });
+        return redirect('contact');
     }
 }
 

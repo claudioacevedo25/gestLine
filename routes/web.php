@@ -86,8 +86,10 @@ Route::group(['middleware' => ['auth', 'role']], function () {
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/search','articuloController@search')->name('search'); 
+    Route::post('/contact/sendmail','usuariosController@contactEmail')->name('sendEmailContact'); 
     Route::get('/product/list', 'articuloController@listarArticulosVta');
     Route::get('/store/{id}', 'articuloController@storeFiltrado');
+
     
     // Productos agregados al carrito
     Route::get('/carrito', 'cartController@index');
