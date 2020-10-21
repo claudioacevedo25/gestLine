@@ -44,22 +44,17 @@ class cartController extends Controller
     public function deleteItem($id)
     {
     
-        if(session()->has('cart')) {
-        $item = Articulo::findOrFail($id);
         $cart = session('cart')->fresh();
-        $total = $cart->count();
-        dd($total);
-        if($total == 1){
+        $item = Articulo::findOrFail($id);
+        if($cart->items->count() == 1){
             session()->forget('cart');
+            return redirect('/carrito');
         }else{
              $cart->items()->detach($item);
              session()->put('cart', $cart);
         }
        
-
-        return redirect('/carrito'); 
-        }
-       
+        return redirect('/carrito');  
     
     }
 
