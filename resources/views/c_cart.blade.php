@@ -157,7 +157,9 @@
                                      <a href="{{ url('/product/list') }}" class="btn btn-outline-primary">Seguir Comprando</a>      
                                 </form>
                                <div class="text-right">
-                                    <a href="{{ url('/cart/empty') }}" class=" text-right btn btn-outline-danger ">Vaciar Carrito</a>
+                                   <form action="{{ url('/cart/empty') }}" id='emptycart' method="get">
+                                        <button type="submit" class="btn btn-outline-danger ">Vaciar Carrito</button>
+                                   </form>
                                </div>
                                
                             </div>
