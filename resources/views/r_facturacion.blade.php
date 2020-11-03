@@ -60,7 +60,7 @@
     </tbody>
 </table>
 <div>
-    <h3 for="" class="font-weight-bold">Total Facturado ${{$total}}</h3>
+    <h3 for="" class="font-weight-bold">Total Facturado ${{number_format($total, $decimal=2)}}</h3>
 </div>
 @else
 <h2>No hay facturas para la fecha seleccionada</h2>

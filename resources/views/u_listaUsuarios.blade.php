@@ -19,7 +19,7 @@
             <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
+                            <th scope="col">Imagen</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
                             <th scope="col">Rol</th>

@@ -78,7 +78,7 @@
                                  </a>
                            </td>
                            <td>    
-                                <form action="articulos/delete/{{$key->id}}" method="post">
+                                <form  id='formDelete' action="articulos/delete/{{$key->id}}" method="POST" role="form">
                                         {{ csrf_field() }}
                                     <div class="form-group row mb-0">
                                         <div class="">
@@ -118,7 +118,7 @@
                                       <input type="number" class="form-control" name="ganancia" id="idGanancia" placeholder="% de ganancia...">
                                       <span class="input-group-btn">
                                         <button type="submit" class="btn btn-outline-primary">Aplicar Masivamente</button>
-                                     </span>
+                                     </span> 
                               </div>
                           </div>  
                       </form>

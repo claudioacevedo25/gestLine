@@ -8,7 +8,7 @@
 </form>
 <div class="row">
     <div class="col-6">
-        <h3 class="text-uppercase p-3 mb-2 bg-info text-white">Por Mes</h3>
+        <h3 class="text-uppercase p-3 mb-2 bg-info text-white">Ventas mensuales</h3>
         <div class="row shadow-lg p-3 mb-5 bg-white rounded">
             <div>
                 <canvas id="myChart" width="400" height="400"></canvas>
@@ -18,7 +18,7 @@
     </div>
 
     <div class="col-6">
-        <h3 class="text-uppercase p-3 mb-2 bg-info text-white">Por Año</h3>
+        <h3 class="text-uppercase p-3 mb-2 bg-info text-white">Ventas Anuales</h3>
         <div class="row shadow-lg p-3 mb-5 bg-white rounded">
             <div>
                 <canvas id="myChart2" width="400" height="400"></canvas>
@@ -32,7 +32,7 @@
 
 <div class="row">
     <div class="col-6">
-        <h3 class="text-uppercase p-3 mb-2 bg-info text-white">Top 5 mas vendidos</h3>
+        <h3 class="text-uppercase p-3 mb-2 bg-info text-white">Top 5  productos mas vendidos</h3>
         <div class="row shadow-lg p-3 mb-5 bg-white rounded">
             <div>
                 <table class="table table-striped">
@@ -81,7 +81,7 @@
         </div>
     </div>
     <div class="col-6">
-        <h3 class="text-uppercase p-3 mb-2 bg-info text-white">Top Clientes</h3>
+        <h3 class="text-uppercase p-3 mb-2 bg-info text-white">Clientes con mas compras</h3>
         <div class="row shadow-lg p-3 mb-5 bg-white rounded">
             <div>
                 <table class="table table-striped">

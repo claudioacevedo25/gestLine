@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Sucursales;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Type\Decimal;
